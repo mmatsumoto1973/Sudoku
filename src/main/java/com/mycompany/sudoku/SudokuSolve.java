@@ -3,6 +3,7 @@ package com.mycompany.sudoku;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -10,11 +11,12 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class SudokuSolve {
 
-	byte initData[][];
-	boolean isFixData[][];
+	byte[][] questionData;
+	byte[][] resultData;
+	boolean[][] isFixData;
 
 	SudokuSolve () {
-		initData = new byte[9][9];
+		questionData = new byte[9][9];
 		isFixData = new boolean[9][9];
 	}
 
@@ -31,25 +33,43 @@ public class SudokuSolve {
 				for (String cell : rowData) {
 					byte value = 0; 
 					boolean isFixed = false; 
-					if (!StringUtils.isEmpty(cell)) {
+					cell = cell.trim();
+					if (!StringUtils.isEmpty(cell) && cell.compareTo("0") !=0 ) {
 						value = Byte.parseByte(cell);
 						isFixed = true; 
 					}
-					initData[row][col] = value;
+					questionData[row][col] = value;
 					isFixData[row][col] = isFixed;
 					col++;
 				}
 				row++;
 			}
+			
+			// 
+			resultData = new byte[questionData.length][];
+			for (int i = 0; i < questionData.length; i++) {
+				resultData[i] = Arrays.copyOf(questionData[i], row);
+			}
         } catch(IOException ex) {
-
+			System.out.println("parse error.");
         }
 	}
 
 	void outputResult() {
+		// 問題出力
 		System.out.println("[問題]");
 		System.out.println("+------------------");
-		for (byte[] rowData : initData) {
+		for (byte[] rowData : questionData) {
+			System.out.printf("|%1$d %2$d %3$d %4$d %5$d %6$d %7$d %8$d %9$d%n", 
+				rowData[0], rowData[1], rowData[2], rowData[3], rowData[4], rowData[5], rowData[6], rowData[7], rowData[8]);
+		}
+		System.out.println("+------------------");
+		System.out.println("");
+
+		// 回答出力
+		System.out.println("[回答]");
+		System.out.println("+------------------");
+		for (byte[] rowData : resultData) {
 			System.out.printf("|%1$d %2$d %3$d %4$d %5$d %6$d %7$d %8$d %9$d%n", 
 				rowData[0], rowData[1], rowData[2], rowData[3], rowData[4], rowData[5], rowData[6], rowData[7], rowData[8]);
 		}
