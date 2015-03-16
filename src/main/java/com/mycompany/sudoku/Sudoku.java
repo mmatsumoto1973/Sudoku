@@ -9,12 +9,18 @@ public class Sudoku {
 	static String output_filename;
 
     public static void main(String[] args) throws Exception {
+		long start = System.currentTimeMillis();
+
 		setArgument(args);
 
 		SudokuSolve solve = new SudokuSolve(); 
 		solve.readQuestion(input_filename);
-		solve.submit();
-		solve.outputResult();
+		solve.solve();
+		solve.outputResult(output_filename);
+		long stop = System.currentTimeMillis();
+
+		System.out.println("prcess time : " + (stop - start));
+		solve.outputResultConsole();
     }
 
     private static void setArgument(String[] args) throws Exception {
