@@ -8,9 +8,9 @@ import java.io.IOException;
 import java.util.Arrays;
 
 /**
- *
+ * 
  */
-public class SudokuSolve {
+public class SudokuSolver {
 	static final int MATRIX_NUM = 9;
 	static final int MIN_VALUE = 1;
 	static final int MAX_VALUE = 9;
@@ -19,14 +19,12 @@ public class SudokuSolve {
 	byte[][] resultData;
 	boolean[][] isFixData;
 
-	SudokuSolve () {
+	SudokuSolver () {
 		questionData = new byte[MATRIX_NUM][MATRIX_NUM];
 		isFixData = new boolean[MATRIX_NUM][MATRIX_NUM];
 	}
 
 	void readQuestion(String inputFile) {
-		long start = 0;
-		long stop = 0;
 
 		try (FileReader fr = new FileReader(inputFile);
             BufferedReader br = new BufferedReader(fr)) {
@@ -77,29 +75,8 @@ public class SudokuSolve {
 				br.newLine();
 			}
         } catch(IOException ex) {
-			System.out.println("parse error.");
+			System.out.println("output error.");
         }
-	}
-
-	void outputResultConsole() {
-		// 問題出力
-		System.out.println("[問題]");
-		System.out.println("+------------------");
-		for (byte[] rowData : questionData) {
-			System.out.printf("|%1$d %2$d %3$d %4$d %5$d %6$d %7$d %8$d %9$d%n", 
-				rowData[0], rowData[1], rowData[2], rowData[3], rowData[4], rowData[5], rowData[6], rowData[7], rowData[8]);
-		}
-		System.out.println("+------------------");
-		System.out.println("");
-
-		// 回答出力
-		System.out.println("[回答]");
-		System.out.println("+------------------");
-		for (byte[] rowData : resultData) {
-			System.out.printf("|%1$d %2$d %3$d %4$d %5$d %6$d %7$d %8$d %9$d%n", 
-				rowData[0], rowData[1], rowData[2], rowData[3], rowData[4], rowData[5], rowData[6], rowData[7], rowData[8]);
-		}
-		System.out.println("+------------------");
 	}
 
 	void solve() {
@@ -116,7 +93,6 @@ public class SudokuSolve {
 				return solve(row, col+1);
 			}
 	 	} else {
-			boolean isSolved = false;
 			byte value = MIN_VALUE ;
 			while (value <= MAX_VALUE) {
 				if (isValidValue(row, col, value)) {
@@ -125,20 +101,15 @@ public class SudokuSolve {
 						return true;	
 					} else if (isLastCol(col)){
 						if (solve(row+1, 0)) {
-							isSolved = true;
-							break;	
+							return true;	
 						}
 					} else {
 						if (solve(row, col+1)) {
-							isSolved = true;
-							break;	
+							return true;	
 						}
 					}
 				}
 				value++;
-			}
-			if (isSolved) {
-				return true;
 			}
 			resultData[row][col] = 0;
 		}
@@ -183,6 +154,27 @@ public class SudokuSolve {
 
 	boolean isLastCol(int col) {
 		return col == (MATRIX_NUM - 1);
+	}
+
+	void outputResultConsole() {
+		// 問題出力
+		System.out.println("[問題]");
+		System.out.println("+------------------");
+		for (byte[] rowData : questionData) {
+			System.out.printf("|%1$d %2$d %3$d %4$d %5$d %6$d %7$d %8$d %9$d%n", 
+				rowData[0], rowData[1], rowData[2], rowData[3], rowData[4], rowData[5], rowData[6], rowData[7], rowData[8]);
+		}
+		System.out.println("+------------------");
+		System.out.println("");
+
+		// 回答出力
+		System.out.println("[回答]");
+		System.out.println("+------------------");
+		for (byte[] rowData : resultData) {
+			System.out.printf("|%1$d %2$d %3$d %4$d %5$d %6$d %7$d %8$d %9$d%n", 
+				rowData[0], rowData[1], rowData[2], rowData[3], rowData[4], rowData[5], rowData[6], rowData[7], rowData[8]);
+		}
+		System.out.println("+------------------");
 	}
 
 }

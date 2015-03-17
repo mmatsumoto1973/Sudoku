@@ -4,7 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * 
  */
 public class Sudoku {
 
@@ -17,26 +17,18 @@ public class Sudoku {
 		long stop = 0;
 
 		try {
+			start = System.currentTimeMillis();
 			setArgument(args);
 
-			SudokuSolve solve = new SudokuSolve(); 
+			SudokuSolver solver = new SudokuSolver(); 
 
-			start = System.currentTimeMillis();
-			solve.readQuestion(input_filename);
+			solver.readQuestion(input_filename);
+			solver.solve();
+			solver.outputResult(output_filename);
+
 			stop = System.currentTimeMillis();
-			System.out.println("prcess time readQuestion: " + (stop - start));
-
-			start = System.currentTimeMillis();
-			solve.solve();
-			stop = System.currentTimeMillis();
-			System.out.println("prcess time solve: " + (stop - start));
-
-			start = System.currentTimeMillis();
-			solve.outputResult(output_filename);
-			stop = System.currentTimeMillis();
-			System.out.println("prcess time outputResult: " + (stop - start));
-
-			solve.outputResultConsole();
+			System.out.println("prcess time : " + (stop - start));
+			solver.outputResultConsole();
 		} catch (Exception ex) {
 			Logger.getLogger(Sudoku.class.getName()).log(Level.SEVERE, null, ex);
 		}
