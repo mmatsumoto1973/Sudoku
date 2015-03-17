@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -26,7 +25,10 @@ public class SudokuSolve {
 	}
 
 	void readQuestion(String inputFile) {
-		try(FileReader fr = new FileReader(inputFile);
+		long start = 0;
+		long stop = 0;
+
+		try (FileReader fr = new FileReader(inputFile);
             BufferedReader br = new BufferedReader(fr)) {
 
 			String str;
@@ -39,7 +41,7 @@ public class SudokuSolve {
 					byte value = 0; 
 					boolean isFixed = false; 
 					cell = cell.trim();
-					if (!StringUtils.isEmpty(cell) && cell.compareTo("0") !=0 ) {
+					if (!cell.isEmpty()) {
 						value = Byte.parseByte(cell);
 						isFixed = true; 
 					}
@@ -50,7 +52,6 @@ public class SudokuSolve {
 				row++;
 			}
 			
-			// 
 			resultData = new byte[questionData.length][];
 			for (int i = 0; i < questionData.length; i++) {
 				resultData[i] = Arrays.copyOf(questionData[i], row);
@@ -79,6 +80,7 @@ public class SudokuSolve {
 			System.out.println("parse error.");
         }
 	}
+
 	void outputResultConsole() {
 		// 問題出力
 		System.out.println("[問題]");
@@ -146,43 +148,26 @@ public class SudokuSolve {
 
 	boolean isValidValue(int row, int col, byte value) {
 		// 行、列、ボックスで同じ値が使用されていない事を評価する
-		return isValidRowValue(row, col, value) 
-			&& isValidColValue(row, col, value) 
-			&& isValidBoxValue(row, col, value);
-	}
-
-	// 行
-	boolean isValidRowValue(int row, int col, byte value) {
 		for (int i = 0; i < MATRIX_NUM; i++) {
+			// 行
 			if (i != col) {
 				if (resultData[row][i] == value) {
 					return false;
 				}
 			}
-		}
-		return true;
-	}
-
-	// 列
-	boolean isValidColValue(int row, int col, byte value) {
-		for (int i = 0; i < MATRIX_NUM; i++) {
+			// 列
 			if (i != row) {
 				if (resultData[i][col] == value) {
 					return false;
 				}
 			}
 		}
-		return true;
-	}
-
-	// ボックス
-	boolean isValidBoxValue(int row, int col, byte value) {
+		//  ボックス
 		int start_row = row/3*3;
 		int start_col = col/3*3;
-
 		for (int i = start_row; i < start_row + 3; i++) {
 			for (int j = start_col; j < start_col + 3; j++) {
-				if (i != row || j != col) {
+				if (i != row && j != col) {
 					if (resultData[i][j] == value) {
 						return false;
 					}
@@ -196,8 +181,8 @@ public class SudokuSolve {
 		return row == (MATRIX_NUM - 1);
 	}
 
-	boolean isLastCol(int cell) {
-		return cell == (MATRIX_NUM - 1);
+	boolean isLastCol(int col) {
+		return col == (MATRIX_NUM - 1);
 	}
 
 }
