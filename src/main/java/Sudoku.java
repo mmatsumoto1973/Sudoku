@@ -4,8 +4,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * 
@@ -202,14 +200,14 @@ public class Sudoku {
 			System.out.println("prcess time : " + (stop - start));
 			solver.outputResultConsole();
 		} catch (Exception ex) {
-			Logger.getLogger(Sudoku.class.getName()).log(Level.SEVERE, null, ex);
+			System.out.println(ex.getMessage());
 		}
 
     }
 
     private static void setArgument(String[] args) throws Exception {
         if ((args.length < 1)  || (args.length > 2))
-            throw new IllegalArgumentException("Parameter Error.");
+            throw new IllegalArgumentException("Usage : \n   Sudoku inputfile outputfile");
 
         input_filename = args[0];
         output_filename = args[1];
