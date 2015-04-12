@@ -86,28 +86,14 @@ public class Sudoku {
 		
 		boolean solve(int row, int col) {
 			if (isFixData[row][col]) {
-				if (isLastRow(row) && isLastCol(col)) {
-					return true;	
-				} else if (isLastCol(col)){
-					return solve(row+1, 0);
-				} else {
-					return solve(row, col+1);
-				}
+				return solve_inner(row, col);
 			} else {
 				byte value = MIN_VALUE ;
 				while (value <= MAX_VALUE) {
 					if (isValidValue(row, col, value)) {
 						resultData[row][col] = value;
-						if (isLastRow(row) && isLastCol(col)) {
+						if (solve_inner(row, col)) {
 							return true;	
-						} else if (isLastCol(col)){
-							if (solve(row+1, 0)) {
-								return true;	
-							}
-						} else {
-							if (solve(row, col+1)) {
-								return true;	
-							}
 						}
 					}
 					value++;
@@ -116,6 +102,17 @@ public class Sudoku {
 			}
 
 			return false;
+		}
+
+		boolean solve_inner(int row, int col) {
+			if (isLastCol(col)) {
+				if (isLastRow(row)) {
+					return true;	
+				} else {
+					return solve(row+1, 0);
+				}
+			}
+			return solve(row, col+1);
 		}
 
 		boolean isValidValue(int row, int col, byte value) {
